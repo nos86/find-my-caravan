@@ -319,7 +319,7 @@ import { computed } from 'vue'
 </script>
 
 <style scoped>
-@reference "tailwindcss";
+@import "tailwindcss";
 
 .section-title {
   @apply text-sm font-semibold text-gray-700 mb-2 pb-1 border-b border-gray-100;
