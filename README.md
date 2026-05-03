@@ -41,6 +41,33 @@
 
 ---
 
+## ☁️ Quick Start (GitHub Codespaces)
+
+The fastest way to try Find My Caravan without installing anything locally.
+
+[![Open in GitHub Codespaces](https://github.com/codespaces/badge.svg)](https://codespaces.new/nos86/find-my-caravan)
+
+1. Click the badge above (or **Code → Codespaces → Create codespace on …** from GitHub).
+2. Wait ~2 minutes while the container builds and the `post-create.sh` script runs automatically. It will:
+   - Install Python 3.12 backend dependencies into a `.venv`
+   - Install Node 20 frontend dependencies
+   - Create a `.env` file pre-configured for the Codespaces environment
+   - Apply the Alembic database migrations
+3. Start the backend in the integrated terminal:
+   ```bash
+   cd backend && source .venv/bin/activate
+   uvicorn app.main:app --reload --host 0.0.0.0 --port 8000
+   ```
+4. Open a **second terminal** and start the frontend:
+   ```bash
+   cd frontend && npm run dev -- --host 0.0.0.0
+   ```
+5. Codespaces will automatically prompt you to open the forwarded **port 5173** in your browser.
+
+> **Tip:** Use the **Run and Debug** panel (`F5`) and select *"Backend: FastAPI (uvicorn)"* for a fully-integrated debugging experience.
+
+---
+
 ## 🚀 Quick Start (Docker)
 
 **Prerequisites:** Docker and Docker Compose installed.
