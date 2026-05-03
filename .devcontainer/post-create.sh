@@ -14,7 +14,7 @@ echo "==> [1/5] Installing Node.js (via nvm) ..."
 export NVM_DIR="/usr/local/share/nvm"
 # shellcheck source=/dev/null
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
-nvm install 20 --lts 2>/dev/null || true
+nvm install 20 2>/dev/null || true
 nvm use 20 2>/dev/null || true
 
 echo "==> [2/5] Installing backend Python dependencies ..."
