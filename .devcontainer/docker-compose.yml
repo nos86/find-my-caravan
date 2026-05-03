@@ -1,0 +1,66 @@
+version: '3.9'
+
+# Codespaces-specific compose file.
+# Provides the dev container itself plus the required backing services
+# (PostgreSQL and Redis). The backend and frontend are run manually via the
+# integrated terminal, NOT as Docker services, so hot-reload works properly.
+
+services:
+  devcontainer:
+    image: mcr.microsoft.com/devcontainers/python:3.12
+    volumes:
+      - ..:/workspace:cached
+    # Keep the container running so VS Code / Codespaces can attach to it
+    command: sleep infinity
+    environment:
+      DATABASE_URL: postgresql+asyncpg://fmc:fmc_secret@postgres:5432/findmycaravan
+      REDIS_URL: redis://redis:6379/0
+      DEBUG: "true"
+      LOG_LEVEL: DEBUG
+      VITE_API_BASE_URL: http://localhost:8000/api/v1
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    networks:
+      - fmc_dev
+
+  postgres:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_USER: fmc
+      POSTGRES_PASSWORD: fmc_secret
+      POSTGRES_DB: findmycaravan
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U fmc"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    restart: unless-stopped
+    networks:
+      - fmc_dev
+
+  redis:
+    image: redis:7-alpine
+    command: redis-server --appendonly yes
+    volumes:
+      - redis_data:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    restart: unless-stopped
+    networks:
+      - fmc_dev
+
+volumes:
+  postgres_data:
+  redis_data:
+
+networks:
+  fmc_dev:
+    driver: bridge

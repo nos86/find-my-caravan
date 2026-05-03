@@ -1,0 +1,79 @@
+{
+  "name": "Find My Caravan",
+  "dockerComposeFile": "docker-compose.yml",
+  "service": "devcontainer",
+  "workspaceFolder": "/workspace",
+  "shutdownAction": "stopCompose",
+  "forwardPorts": [8000, 5173, 5432, 6379],
+  "portsAttributes": {
+    "8000": {
+      "label": "Backend API (FastAPI)",
+      "onAutoForward": "notify"
+    },
+    "5173": {
+      "label": "Frontend (Vue 3 / Vite)",
+      "onAutoForward": "openBrowser"
+    },
+    "5432": {
+      "label": "PostgreSQL",
+      "onAutoForward": "silent"
+    },
+    "6379": {
+      "label": "Redis",
+      "onAutoForward": "silent"
+    }
+  },
+  "postCreateCommand": "bash .devcontainer/post-create.sh",
+  "remoteEnv": {
+    "DATABASE_URL": "postgresql+asyncpg://fmc:fmc_secret@postgres:5432/findmycaravan",
+    "REDIS_URL": "redis://redis:6379/0",
+    "DEBUG": "true",
+    "LOG_LEVEL": "DEBUG",
+    "VITE_API_BASE_URL": "http://localhost:8000/api/v1"
+  },
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "ms-python.python",
+        "ms-python.vscode-pylance",
+        "charliermarsh.ruff",
+        "Vue.volar",
+        "bradlc.vscode-tailwindcss",
+        "esbenp.prettier-vscode",
+        "dbaeumer.vscode-eslint",
+        "mtxr.sqltools",
+        "mtxr.sqltools-driver-pg",
+        "ms-azuretools.vscode-docker",
+        "mhutchie.git-graph",
+        "humao.rest-client"
+      ],
+      "settings": {
+        "python.defaultInterpreterPath": "/workspace/backend/.venv/bin/python",
+        "python.analysis.extraPaths": ["/workspace/backend"],
+        "[python]": {
+          "editor.defaultFormatter": "charliermarsh.ruff",
+          "editor.formatOnSave": true
+        },
+        "[typescript]": {
+          "editor.defaultFormatter": "esbenp.prettier-vscode",
+          "editor.formatOnSave": true
+        },
+        "[vue]": {
+          "editor.defaultFormatter": "esbenp.prettier-vscode",
+          "editor.formatOnSave": true
+        },
+        "sqltools.connections": [
+          {
+            "name": "Find My Caravan (dev)",
+            "driver": "PostgreSQL",
+            "host": "postgres",
+            "port": 5432,
+            "database": "findmycaravan",
+            "username": "fmc",
+            "password": "fmc_secret"
+          }
+        ]
+      }
+    }
+  }
+}
